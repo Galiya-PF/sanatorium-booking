@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Санаторно-курортное лечение - Подача заявки</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        .container-custom {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        .card {
+            border: none;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        .card-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: 15px 15px 0 0 !important;
+            padding: 20px;
+        }
+        .form-label {
+            font-weight: 600;
+            color: #333;
+        }
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border: none;
+            padding: 12px 30px;
+            font-weight: 600;
+        }
+        .btn-primary:hover {
+            opacity: 0.9;
+        }
+        .nav-tabs .nav-link {
+            color: #667eea;
+            font-weight: 600;
+        }
+        .nav-tabs .nav-link.active {
+            color: #764ba2;
+            border-bottom: 3px solid #764ba2;
+        }
+        .status-badge {
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.85em;
+            font-weight: 600;
+        }
+        .status-pending {
+            background-color: #ffc107;
+            color: #333;
+        }
+        .status-approved {
+            background-color: #28a745;
+            color: white;
+        }
+        .status-rejected {
+            background-color: #dc3545;
+            color: white;
+        }
+        .table-responsive {
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        .alert-custom {
+            border-radius: 10px;
+            border: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container-custom">
+        <div class="card">
+            <div class="card-header">
+                <h2 class="text-center mb-0">🏥 Санаторно-курортное лечение</h2>
+                <p class="text-center mb-0 mt-2">Система автоматизации заявок</p>
+            </div>
+            <div class="card-body p-4">
+                <ul class="nav nav-tabs mb-4" id="myTab" role="tablist">
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link active" id="application-tab" data-bs-toggle="tab" data-bs-target="#application" type="button">Подать заявку</button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="admin-tab" data-bs-toggle="tab" data-bs-target="#admin" type="button">Админ-панель</button>
+                    </li>
+                </ul>
+                
+                <div class="tab-content" id="myTabContent">
+                    <!-- Форма подачи заявки -->
+                    <div class="tab-pane fade show active" id="application" role="tabpanel">
+                        <form id="applicationForm">
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label">ФИО *</label>
+                                    <input type="text" class="form-control" id="full_name" required placeholder="Иванов Иван Иванович">
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label">Отдел/Подразделение</label>
+                                    <input type="text" class="form-control" id="department" placeholder="Бухгалтерия">
+                                </div>
+                            </div>
+                            
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label">Email *</label>
+                                    <input type="email" class="form-control" id="email" required placeholder="email@example.com">
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label">Телефон *</label>
+                                    <input type="tel" class="form-control" id="phone" required placeholder="+7 (XXX) XXX-XX-XX">
+                                </div>
+                            </div>
+                            
+                            <div class="mb-3">
+                                <label class="form-label">Санаторий *</label>
+                                <select class="form-select" id="sanatorium" required>
+                                    <option value="">Выберите санаторий</option>
+                                </select>
+                            </div>
+                            
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label">Дата начала *</label>
+                                    <input type="date" class="form-control" id="start_date" required>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label">Количество дней (7-10) *</label>
+                                    <input type="number" class="form-control" id="days" min="7" max="10" required placeholder="7-10">
+                                </div>
+                            </div>
+                            
+                            <div class="mb-3">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="vacation_schedule_confirmed" required>
+                                    <label class="form-check-label" for="vacation_schedule_confirmed">
+                                        Подтверждаю, что даты соответствуют моему графику отпусков *
+                                    </label>
+                                </div>
+                            </div>
+                            
+                            <div id="formAlert" class="alert alert-custom d-none"></div>
+                            
+                            <button type="submit" class="btn btn-primary w-100">Отправить заявку</button>
+                        </form>
+                    </div>
+                    
+                    <!-- Админ-панель -->
+                    <div class="tab-pane fade" id="admin" role="tabpanel">
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <h4>Заявки на санаторно-курортное лечение</h4>
+                            <button class="btn btn-sm btn-outline-primary" onclick="loadApplications()">Обновить</button>
+                        </div>
+                        
+                        <div class="row mb-3">
+                            <div class="col-md-4">
+                                <div class="card bg-warning text-dark p-3">
+                                    <h6 class="mb-0">Ожидают рассмотрения</h6>
+                                    <h3 class="mb-0" id="pendingCount">0</h3>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="card bg-success text-white p-3">
+                                    <h6 class="mb-0">Одобрено</h6>
+                                    <h3 class="mb-0" id="approvedCount">0</h3>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="card bg-danger text-white p-3">
+                                    <h6 class="mb-0">Отклонено</h6>
+                                    <h3 class="mb-0" id="rejectedCount">0</h3>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th>Дата</th>
+                                        <th>ФИО</th>
+                                        <th>Санаторий</th>
+                                        <th>Даты</th>
+                                        <th>Дней</th>
+                                        <th>Статус</th>
+                                        <th>Действия</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="applicationsTable">
+                                    <tr>
+                                        <td colspan="7" class="text-center">Загрузка...</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Модальное окно для обработки заявки -->
+    <div class="modal fade" id="processModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Обработка заявки</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div id="applicationDetails"></div>
+                    <hr>
+                    <div class="mb-3">
+                        <label class="form-label">Статус</label>
+                        <select class="form-select" id="newStatus">
+                            <option value="pending">Ожидает рассмотрения</option>
+                            <option value="approved">Одобрено</option>
+                            <option value="rejected">Отклонено</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Комментарий администратора</label>
+                        <textarea class="form-control" id="adminComment" rows="3" placeholder="Введите комментарий для работника..."></textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Предпросмотр уведомления:</label>
+                        <div class="alert alert-info" id="notificationPreview">
+                            Уважаемый [Имя]! вам забронирована санаторно-курортное лечение в санаторий "[Санаторий]" с [Дата] года на [Дней] дней. Просим подойти в профсоюз за доверенностью
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Отмена</button>
+                    <button type="button" class="btn btn-primary" onclick="updateApplication()">Сохранить</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="/static/app.js"></script>
+</body>
+</html>
